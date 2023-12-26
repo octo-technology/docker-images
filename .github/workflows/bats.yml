@@ -13,7 +13,7 @@ env:
   IMAGE_TAG: ${{ github.repository }}/bats:v1.10.0-curl
 
 jobs:
-  build-and-push-docker-image:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,6 +37,28 @@ jobs:
           context: bats
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}
+
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    needs: build
+    steps:
+      - uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
   check:
     runs-on: ubuntu-latest

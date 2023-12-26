@@ -36,5 +36,5 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           context: bats
-          push: false
+          push: true
           tags: ${{ env.IMAGE_TAG }}

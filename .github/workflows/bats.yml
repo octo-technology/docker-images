@@ -1,12 +1,12 @@
 ---
 name: Build bats docker image
-run-name: ${{ github.actor }} is flying to infinity and beyond 🚀
+run-name: ${{ github.actor }} is building bats
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    paths:
+    - 'bats/**'
 
 env:
   REGISTRY: ghcr.io

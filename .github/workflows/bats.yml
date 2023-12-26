@@ -37,3 +37,18 @@ jobs:
           context: bats
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Dockerfile linting
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: bats/Dockerfile
+          ignore: DL3018

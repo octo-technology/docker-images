@@ -10,8 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/bats
-  IMAGE_TAG: v1.10.0-curl
+  IMAGE_TAG: ${{ github.repository }}/bats:v1.10.0-curl
 
 jobs:
   build-and-push-docker-image:

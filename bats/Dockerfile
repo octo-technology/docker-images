@@ -1,3 +1,4 @@
 FROM bats/bats:v1.10.0
 
-RUN apk add --no-cache curl
+RUN apk update && apk upgrade --no-cache && \
+    apk add --no-cache curl

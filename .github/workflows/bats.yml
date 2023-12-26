@@ -36,4 +36,4 @@ jobs:
         with:
           context: bats
           push: true
-          tags: ${{ env.IMAGE_TAG }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_TAG }}

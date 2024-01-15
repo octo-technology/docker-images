@@ -3,6 +3,10 @@ name: Build bats docker image
 run-name: ${{ github.actor }} is building bats
 
 on:
+  push:
+    branches: [ "main" ]
+    paths:
+    - 'bats/**'
   pull_request:
     branches: [ "main" ]
     paths:

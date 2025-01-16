@@ -1,3 +1,4 @@
+# Référence de l'ensemble des versions à utiliser pour l'installation des outils
 FROM docker.io/prom/prometheus:v3.1.0 AS prometheus
 FROM docker.io/prom/alertmanager:v0.28.0 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.22.34 AS aws-cli
@@ -6,7 +7,6 @@ FROM docker.io/bitnami/kubectl:1.32 AS kubectl
 FROM docker.io/bitnami/trivy:0.58.2 AS trivy
 FROM docker.io/derailed/k9s:v0.32.7 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
-
 
 FROM ghcr.io/coder/code-server:4.96.2-ubuntu
 ARG KUBECTX_VERSION="v0.9.5"
@@ -38,10 +38,8 @@ RUN wget -q https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSIO
     chmod +x /usr/local/bin/kubens /usr/local/bin/kubectx
 
 # Installer kube-ps1
-RUN wget -q https://raw.githubusercontent.com/jonmosco/kube-ps1/refs/heads/master/kube-ps1.sh -O /usr/local/bin/kube-ps1.sh && \
-    echo 'source /usr/local/bin/kube-ps1.sh' >> .bashrc && \
-    echo "export PS1='[${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] \$(kube_ps1)] \$ '" >> .bashrc && \
-    echo "alias aws_ecr_login='aws ecr get-login-password --region \$AWS_REGION | docker login --username \$DOCKER_REGISTRY_USERNAME --password-stdin \$REGISTRY_URL'" >> .bashrc
+COPY bash_completion.sh /etc/bash_completion
+RUN wget -q https://raw.githubusercontent.com/jonmosco/kube-ps1/refs/heads/master/kube-ps1.sh -O /usr/local/bin/kube-ps1.sh
 
 # Installer promtool + prometheus + alertmanager + amtool
 COPY --from=prometheus /bin/prometheus /usr/local/bin

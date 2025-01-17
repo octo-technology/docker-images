@@ -1,0 +1,19 @@
+---
+name: Build code-server container image
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "code-server/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "code-server/**"
+
+jobs:
+  build-code-server:
+    uses: ./.github/workflows/generic-docker-build.yml
+    with:
+      image-folder: code-server
+      image-tag: 4.96.2-ubuntu

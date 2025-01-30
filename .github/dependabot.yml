@@ -13,4 +13,7 @@ updates:
     directory: "/bats"
     schedule:
       interval: "weekly"
-
+  - package-ecosystem: "docker"
+    directory: "/code-server"
+    schedule:
+      interval: "weekly"

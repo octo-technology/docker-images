@@ -4,7 +4,7 @@ FROM docker.io/prom/alertmanager:v0.28.0 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.22.34 AS aws-cli
 FROM docker.io/library/docker:27 AS docker-compose
 FROM docker.io/bitnami/kubectl:1.32 AS kubectl
-FROM docker.io/bitnami/trivy:0.58.2 AS trivy
+FROM docker.io/bitnami/trivy:0.59.0 AS trivy
 FROM docker.io/derailed/k9s:v0.32.7 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
 

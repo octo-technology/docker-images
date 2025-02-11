@@ -9,7 +9,7 @@ FROM docker.io/derailed/k9s:v0.32.7 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
 FROM ghcr.io/grafana/k6:0.56.0 AS k6
 
-FROM ghcr.io/coder/code-server:4.96.2-ubuntu
+FROM ghcr.io/coder/code-server:4.96.4-ubuntu
 ARG KUBECTX_VERSION="v0.9.5"
 
 # Nécessaire pour installer les paquets

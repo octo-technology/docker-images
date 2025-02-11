@@ -7,6 +7,7 @@ FROM docker.io/bitnami/kubectl:1.32 AS kubectl
 FROM docker.io/bitnami/trivy:0.58.2 AS trivy
 FROM docker.io/derailed/k9s:v0.32.7 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
+FROM ghcr.io/grafana/k6:0.56.0 AS k6
 
 FROM ghcr.io/coder/code-server:4.96.2-ubuntu
 ARG KUBECTX_VERSION="v0.9.5"
@@ -28,11 +29,12 @@ COPY --from=aws-cli /usr/local /usr/local
 # Installer docker-compose extension
 COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
 
-# Installer kubectl/trivy/k9s/dive
+# Installer kubectl/trivy/k9s/dive/k6
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin
 COPY --from=trivy /opt/bitnami/trivy/bin/trivy /usr/local/bin
 COPY --from=k9s /bin/k9s /usr/local/bin
 COPY --from=dive /usr/local/bin/dive /usr/local/bin
+COPY --from=k6 /usr/bin/k6 /usr/local/bin
 
 # Installer kubectx
 ADD --chmod=755 https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubectx /usr/local/bin/kubectx

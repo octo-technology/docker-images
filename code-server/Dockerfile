@@ -2,7 +2,8 @@
 FROM docker.io/prom/prometheus:v3.1.0 AS prometheus
 FROM docker.io/prom/alertmanager:v0.28.0 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.22.34 AS aws-cli
-FROM docker.io/library/docker:27 AS docker-compose
+FROM docker.io/library/docker:27.5.1-cli AS docker
+FROM docker.io/docker/buildx-bin:0.20.1 AS buildx
 FROM docker.io/bitnami/kubectl:1.32 AS kubectl
 FROM docker.io/bitnami/trivy:0.58.2 AS trivy
 FROM docker.io/derailed/k9s:v0.32.7 AS k9s
@@ -36,8 +37,10 @@ ADD --chmod=755 --chown=root:root \
     https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/${AWS_ECR_HELPER_VERSION}/${TARGETOS}-${TARGETARCH}/docker-credential-ecr-login \
     /usr/local/bin/docker-credential-ecr-login
 
-# Installer docker-compose extension
-COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
+# Installer docker & docker-compose
+COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
+COPY --from=buildx /buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
 # Installer kubectl/trivy/k9s/dive/k6/helm
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin

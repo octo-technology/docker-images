@@ -56,6 +56,8 @@ jobs:
           context: ${{ inputs.image-folder }}
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   scan:
     runs-on: ubuntu-latest

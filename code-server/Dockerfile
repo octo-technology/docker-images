@@ -17,7 +17,7 @@ FROM gcr.io/k8s-skaffold/skaffold:v2.14.1 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.9.0 AS opentofu
 FROM docker.io/hashicorp/terraform:1.10.5 AS terraform
 
-FROM ghcr.io/coder/code-server:4.96.2-noble
+FROM ghcr.io/coder/code-server:4.96.4-noble
 ARG TARGETOS
 ARG TARGETARCH
 

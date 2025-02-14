@@ -16,4 +16,4 @@ jobs:
     uses: ./.github/workflows/generic-docker-build.yml
     with:
       image-folder: bats
-      image-tag: v1.10.0-curl
+      image-tag: v1.11.1-curl

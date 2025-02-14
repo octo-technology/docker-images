@@ -66,6 +66,7 @@ jobs:
       packages: read
     needs: build
     steps:
+      - uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -74,6 +75,7 @@ jobs:
           exit-code: "1"
           ignore-unfixed: true
           skip-dirs: ${{ inputs.skip-dirs }}
+          trivyignores: "${{ inputs.image-folder }}/.trivyignore"
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
         env:

@@ -13,6 +13,9 @@ FROM docker.io/alpine/helm:3.17.0 AS helm
 FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.14.1 AS skaffold
+# A opentofu minimal image will be published soon : https://github.com/opentofu/opentofu/issues/2356
+FROM ghcr.io/opentofu/opentofu:1.9.0 AS opentofu
+FROM docker.io/hashicorp/terraform:1.10.5 AS terraform
 
 FROM ghcr.io/coder/code-server:4.96.2-noble
 ARG TARGETOS
@@ -42,7 +45,7 @@ COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
 COPY --from=buildx /buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
-# Installer kubectl/trivy/k9s/dive/k6/helm
+# Installer kubectl/trivy/k9s/dive/k6/helm/hadolint/dockle/skaffold/opentofu/terraform
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin
 COPY --from=trivy /opt/bitnami/trivy/bin/trivy /usr/local/bin
 COPY --from=k9s /bin/k9s /usr/local/bin
@@ -52,6 +55,8 @@ COPY --from=helm /usr/bin/helm /usr/local/bin
 COPY --from=hadolint /bin/hadolint /usr/local/bin
 COPY --from=dockle /usr/bin/dockle /usr/local/bin
 COPY --from=skaffold /usr/bin/skaffold /usr/local/bin
+COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin
+COPY --from=terraform /bin/terraform /usr/local/bin
 
 # Install krew
 ENV KREW_VERSION="v0.4.4"

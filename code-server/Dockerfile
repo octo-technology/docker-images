@@ -29,7 +29,8 @@ ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris
 RUN apt-get -y update && apt-get -y install \
     git vim wget htop unzip groff-base gnupg2 pass bind9-utils gettext-base apache2-utils emacs jq ipcalc xz-utils && \
     # Nettoyer les fichiers inutiles
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
 

@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/providers/confmap"
 	"github.com/knadh/koanf/providers/env"
+	"github.com/knadh/koanf/v2"
 )
 
 var K = koanf.New(".")

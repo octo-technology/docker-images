@@ -1,0 +1,19 @@
+---
+name: Build download-api container image
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "download-api/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "download-api/**"
+
+jobs:
+  build-download-api:
+    uses: ./.github/workflows/generic-docker-build.yml
+    with:
+      image-folder: download-api
+      image-tag: 0.1.0

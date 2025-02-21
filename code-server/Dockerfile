@@ -16,6 +16,7 @@ FROM gcr.io/k8s-skaffold/skaffold:v2.14.1 AS skaffold
 # A opentofu minimal image will be published soon : https://github.com/opentofu/opentofu/issues/2356
 FROM ghcr.io/opentofu/opentofu:1.9.0 AS opentofu
 FROM docker.io/hashicorp/terraform:1.10.5 AS terraform
+FROM registry.gitlab.com/gitlab-org/cli:v1.53.0 AS gitlab-cli
 
 FROM ghcr.io/coder/code-server:4.96.4-noble
 ARG TARGETOS
@@ -27,9 +28,23 @@ WORKDIR /home/coder
 ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris
 # Mettre à jour les paquets et installer les dépendances
 RUN apt-get -y update && apt-get -y install \
-    git vim wget htop unzip groff-base gnupg2 pass bind9-utils gettext-base apache2-utils emacs jq ipcalc xz-utils && \
+    git \
+    vim \
+    wget \
+    htop \
+    unzip \
+    groff-base \
+    gnupg2 \
+    pass \
+    bind9-utils \
+    gettext-base \
+    apache2-utils \
+    emacs \
+    jq \
+    ipcalc \
+    xz-utils \
     # Nettoyer les fichiers inutiles
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
@@ -46,7 +61,7 @@ COPY --from=docker /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
 COPY --from=buildx /buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
-# Installer kubectl/trivy/k9s/dive/k6/helm/hadolint/dockle/skaffold/opentofu/terraform
+# Installer cli tools
 COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin
 COPY --from=trivy /opt/bitnami/trivy/bin/trivy /usr/local/bin
 COPY --from=k9s /bin/k9s /usr/local/bin
@@ -58,6 +73,7 @@ COPY --from=dockle /usr/bin/dockle /usr/local/bin
 COPY --from=skaffold /usr/bin/skaffold /usr/local/bin
 COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin
 COPY --from=terraform /bin/terraform /usr/local/bin
+COPY --from=gitlab-cli /usr/bin/glab /usr/local/bin
 
 # Install krew
 ENV KREW_VERSION="v0.4.4"

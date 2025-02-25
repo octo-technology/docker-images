@@ -17,3 +17,11 @@ updates:
     directory: "/code-server"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/download-api"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "gomod"
+    directory: "/download-api"
+    schedule:
+      interval: "weekly"

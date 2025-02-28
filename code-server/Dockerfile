@@ -106,5 +106,8 @@ COPY --from=prometheus /bin/promtool /usr/local/bin
 COPY --from=alertmanager /bin/alertmanager /usr/local/bin
 COPY --from=alertmanager /bin/amtool /usr/local/bin
 
+# Installation de plugins ❤️
+RUN code-server --install-extension bierner.markdown-mermaid
+
 # Définir le point d'entrée par défaut
 CMD ["/bin/bash"]

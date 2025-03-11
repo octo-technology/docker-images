@@ -51,7 +51,7 @@ USER coder
 
 # Install AWS CLI & docker-credential-ecr-login
 COPY --from=aws-cli /usr/local /usr/local
-ENV AWS_ECR_HELPER_VERSION="0.9.0"
+ENV AWS_ECR_HELPER_VERSION="0.9.1"
 ADD --chmod=755 --chown=root:root \
     https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/${AWS_ECR_HELPER_VERSION}/${TARGETOS}-${TARGETARCH}/docker-credential-ecr-login \
     /usr/local/bin/docker-credential-ecr-login

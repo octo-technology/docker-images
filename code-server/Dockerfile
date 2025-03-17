@@ -9,7 +9,7 @@ FROM docker.io/bitnami/trivy:0.60.0 AS trivy
 FROM docker.io/derailed/k9s:v0.40.8 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
 FROM ghcr.io/grafana/k6:0.57.0 AS k6
-FROM docker.io/alpine/helm:3.17.1 AS helm
+FROM docker.io/alpine/helm:3.17.2 AS helm
 FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.14.1 AS skaffold

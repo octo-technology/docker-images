@@ -6,7 +6,7 @@ FROM docker.io/library/docker:28.0.1-cli AS docker
 FROM docker.io/docker/buildx-bin:0.22.0 AS buildx
 FROM docker.io/bitnami/kubectl:1.32 AS kubectl
 FROM docker.io/bitnami/trivy:0.60.0 AS trivy
-FROM docker.io/derailed/k9s:v0.40.8 AS k9s
+FROM docker.io/derailed/k9s:v0.40.10 AS k9s
 FROM docker.io/wagoodman/dive:v0.12 AS dive
 FROM ghcr.io/grafana/k6:0.57.0 AS k6
 FROM docker.io/alpine/helm:3.17.2 AS helm

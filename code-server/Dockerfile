@@ -33,6 +33,7 @@ RUN apt-get -y update && apt-get -y install \
     wget \
     htop \
     unzip \
+    bash-completion \
     groff-base \
     gnupg2 \
     pass \

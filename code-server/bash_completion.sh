@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /usr/share/bash-completion/completions/git
+source /usr/share/bash-completion/completions/ssh
 source <(docker completion bash)
 source <(kubectl completion bash)
 alias k=kubectl

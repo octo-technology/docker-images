@@ -98,7 +98,7 @@ ADD --chmod=755 --chown=root:root https://github.com/ahmetb/kubectx/releases/dow
 ADD --chmod=755 --chown=root:root https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubens /usr/local/bin/kubens
 
 # Installer kube-ps1
-COPY bash_completion.sh /etc/bash_completion
+COPY bash_completion.sh /etc/bash_completion.d/kube.sh
 ADD --chmod=755 https://raw.githubusercontent.com/jonmosco/kube-ps1/refs/heads/master/kube-ps1.sh /usr/local/bin/kube-ps1.sh
 
 # Installer promtool + prometheus + alertmanager + amtool

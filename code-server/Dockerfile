@@ -5,7 +5,7 @@ FROM public.ecr.aws/aws-cli/aws-cli:2.25.4 AS aws-cli
 FROM docker.io/library/docker:28.0.4-cli AS docker
 FROM docker.io/docker/buildx-bin:0.22.0 AS buildx
 FROM docker.io/bitnami/kubectl:1.32 AS kubectl
-FROM docker.io/bitnami/trivy:0.60.0 AS trivy
+FROM docker.io/bitnami/trivy:0.61.0 AS trivy
 FROM docker.io/derailed/k9s:v0.40.10 AS k9s
 FROM ghcr.io/wagoodman/dive:0.13.0 AS dive
 FROM ghcr.io/grafana/k6:0.57.0 AS k6

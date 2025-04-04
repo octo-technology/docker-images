@@ -12,7 +12,7 @@ FROM ghcr.io/grafana/k6:0.58.0 AS k6
 FROM docker.io/alpine/helm:3.17.2 AS helm
 FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
-FROM gcr.io/k8s-skaffold/skaffold:v2.14.2 AS skaffold
+FROM gcr.io/k8s-skaffold/skaffold:v2.15.0 AS skaffold
 # A opentofu minimal image will be published soon : https://github.com/opentofu/opentofu/issues/2356
 FROM ghcr.io/opentofu/opentofu:1.9.0 AS opentofu
 FROM docker.io/hashicorp/terraform:1.11.3 AS terraform

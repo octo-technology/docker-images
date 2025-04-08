@@ -44,6 +44,7 @@ RUN apt-get -y update && apt-get -y install \
     jq \
     ipcalc \
     xz-utils \
+    gron \
     # Nettoyer les fichiers inutiles
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem

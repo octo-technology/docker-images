@@ -17,4 +17,4 @@ jobs:
     with:
       image-folder: code-server
       image-tag: 4.99.0-ubuntu
-      skip-dirs: "/home/coder/.local/share/code-server/extensions/"
+      skip-dirs: "/usr/local/bin,/home/coder/.local/share/code-server/extensions"

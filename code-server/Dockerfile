@@ -109,7 +109,8 @@ COPY --from=alertmanager /bin/alertmanager /usr/local/bin
 COPY --from=alertmanager /bin/amtool /usr/local/bin
 
 # Installation de plugins ❤️
-RUN code-server --install-extension bierner.markdown-mermaid
+# Temporary disabled, as long as Open-VSX is down : https://github.com/EclipseFdn/open-vsx.org/issues/3805
+# RUN code-server --install-extension bierner.markdown-mermaid
 
 # Définir le point d'entrée par défaut
 CMD ["/bin/bash"]

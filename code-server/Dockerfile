@@ -77,7 +77,7 @@ COPY --from=terraform /bin/terraform /usr/local/bin
 COPY --from=gitlab-cli /usr/bin/glab /usr/local/bin
 
 # Install krew
-ENV KREW_VERSION="v0.4.4"
+ENV KREW_VERSION="v0.4.5"
 # hadolint ignore=DL3003,SC2016
 RUN KREW_BINARY="krew-${TARGETOS}_${TARGETARCH}" && \
     TMPDIR="$(mktemp -d)" && \

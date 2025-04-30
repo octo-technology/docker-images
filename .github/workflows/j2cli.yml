@@ -1,0 +1,19 @@
+---
+name: Build j2cli container image
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "j2cli/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "j2cli/**"
+
+jobs:
+  build-j2cli:
+    uses: ./.github/workflows/generic-docker-build.yml
+    with:
+      image-folder: j2cli
+      image-tag: 0.1.0

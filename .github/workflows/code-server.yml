@@ -16,5 +16,5 @@ jobs:
     uses: ./.github/workflows/generic-docker-build.yml
     with:
       image-folder: code-server
-      image-tag: 4.99.3-ubuntu
+      image-tag: 4.99.4-ubuntu
       skip-dirs: "/usr/local/bin,/home/coder/.local/share/code-server/extensions"

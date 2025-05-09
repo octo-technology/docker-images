@@ -8,7 +8,7 @@ FROM docker.io/bitnami/kubectl:1.33 AS kubectl
 FROM docker.io/bitnami/trivy:0.62.1 AS trivy
 FROM docker.io/derailed/k9s:v0.50.5 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive
-FROM ghcr.io/grafana/k6:0.59.0 AS k6
+FROM ghcr.io/grafana/k6:1.0.0 AS k6
 FROM docker.io/alpine/helm:3.17.3 AS helm
 FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle

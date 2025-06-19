@@ -15,7 +15,7 @@ FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.16.0 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.9.1-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.12.2 AS terraform
-FROM registry.gitlab.com/gitlab-org/cli:v1.60.1 AS gitlab-cli
+FROM registry.gitlab.com/gitlab-org/cli:v1.60.2 AS gitlab-cli
 
 FROM ghcr.io/coder/code-server:4.100.2-noble
 ARG TARGETOS

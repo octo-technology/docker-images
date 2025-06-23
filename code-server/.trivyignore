@@ -1,1 +1,4 @@
-# nothing here ! Congrats !
+# Exception: CVE-2025-22874 is detected due to a vulnerable Go stdlib in a dependency (likely from krew or a related tool).
+# This is temporarily ignored until an upstream fix is available (Go >= 1.24.4 or a patched krew release).
+# Remove this ignore rule once the base image or krew installation is updated to a non-vulnerable version.
+CVE-2025-22874

@@ -2,3 +2,7 @@
 # This is temporarily ignored until an upstream fix is available (Go >= 1.24.4 or a patched krew release).
 # Remove this ignore rule once the base image or krew installation is updated to a non-vulnerable version.
 CVE-2025-22874
+
+# sudo
+CVE-2025-32462
+CVE-2025-32463

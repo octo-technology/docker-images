@@ -44,9 +44,13 @@ RUN apt-get -y update && apt-get -y install \
     ipcalc \
     xz-utils \
     gron \
+    python3-pip \
     # Nettoyer les fichiers inutiles
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem
+    rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem && \
+    # Création d'alias python/pip => python3/pip3
+    ln -s /usr/bin/python3 /usr/local/bin/python && \
+    ln -s /usr/bin/pip3 /usr/local/bin/pip
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
 

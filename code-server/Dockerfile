@@ -45,14 +45,23 @@ RUN apt-get -y update && apt-get -y install \
     xz-utils \
     gron \
     python3-pip \
+    python3-venv \
     # Nettoyer les fichiers inutiles
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem && \
     # Création d'alias python/pip => python3/pip3
     ln -s /usr/bin/python3 /usr/local/bin/python && \
     ln -s /usr/bin/pip3 /usr/local/bin/pip
+
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
+
+# Création d'un environnement virtuel python dans /home/coder
+RUN python3 -m venv /home/coder/venv && \
+    /home/coder/venv/bin/pip install --upgrade pip
+
+# Activation automatique du venv à chaque ouverture de shell
+RUN echo 'source ~/venv/bin/activate' >> ~/.bashrc
 
 # Install AWS CLI & docker-credential-ecr-login
 COPY --from=aws-cli /usr/local /usr/local

@@ -56,13 +56,6 @@ RUN apt-get -y update && apt-get -y install \
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
 
-# Création d'un environnement virtuel python dans /home/coder
-RUN python3 -m venv /home/coder/venv && \
-    /home/coder/venv/bin/pip install --upgrade pip
-
-# Activation automatique du venv à chaque ouverture de shell
-RUN echo 'source ~/venv/bin/activate' >> ~/.bashrc
-
 # Install AWS CLI & docker-credential-ecr-login
 COPY --from=aws-cli /usr/local /usr/local
 ENV AWS_ECR_HELPER_VERSION="0.9.1"

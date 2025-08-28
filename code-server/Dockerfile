@@ -1,21 +1,21 @@
 # Référence de l'ensemble des versions à utiliser pour l'installation des outils
 FROM docker.io/prom/prometheus:v3.5.0 AS prometheus
 FROM docker.io/prom/alertmanager:v0.28.1 AS alertmanager
-FROM public.ecr.aws/aws-cli/aws-cli:2.28.8 AS aws-cli
+FROM public.ecr.aws/aws-cli/aws-cli:2.28.18 AS aws-cli
 FROM docker.io/library/docker:28.3.3-cli AS docker
-FROM docker.io/docker/buildx-bin:0.26.1 AS buildx
+FROM docker.io/docker/buildx-bin:0.27.0 AS buildx
 FROM docker.io/bitnami/kubectl:1.33 AS kubectl
 FROM docker.io/bitnami/trivy:0.65.0 AS trivy
 FROM docker.io/derailed/k9s:v0.50.9 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive
-FROM ghcr.io/grafana/k6:1.2.1 AS k6
-FROM docker.io/alpine/helm:3.18.4 AS helm
+FROM ghcr.io/grafana/k6:1.2.3 AS k6
+FROM docker.io/alpine/helm:3.18.6 AS helm
 FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.16.1 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.10.5-minimal AS opentofu
-FROM docker.io/hashicorp/terraform:1.12.2 AS terraform
-FROM registry.gitlab.com/gitlab-org/cli:v1.66.0 AS gitlab-cli
+FROM docker.io/hashicorp/terraform:1.13.0 AS terraform
+FROM registry.gitlab.com/gitlab-org/cli:v1.67.0 AS gitlab-cli
 
 FROM ghcr.io/coder/code-server:4.103.0-noble
 ARG TARGETOS
@@ -45,12 +45,14 @@ RUN apt-get -y update && apt-get -y install \
     xz-utils \
     gron \
     python3-pip \
+    python3-venv \
     # Nettoyer les fichiers inutiles
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/certs/ssl-cert-snakeoil.pem && \
     # Création d'alias python/pip => python3/pip3
     ln -s /usr/bin/python3 /usr/local/bin/python && \
     ln -s /usr/bin/pip3 /usr/local/bin/pip
+
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
 

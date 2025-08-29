@@ -33,6 +33,13 @@ jobs:
       id-token: write
 
     steps:
+      - name: Build informations
+        id: build-info
+        run: |
+          echo "Building ${{ inputs.image-name || inputs.image-folder }} (tag ${{ inputs.image-tag }})"
+          echo "ci-image-name=${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:ci-${{ github.sha }}" >> $GITHUB_OUTPUT
+          echo "image-name=${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}" >> $GITHUB_OUTPUT
+
       - name: Checkout repository
         uses: actions/checkout@v5
 
@@ -55,14 +62,14 @@ jobs:
           platforms: linux/amd64,linux/arm64
           context: ${{ inputs.image-folder }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:ci-${{ github.sha }}
+          tags: ${{ steps.build-info.outputs.ci-image-name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:ci-${{ github.sha }}
+          image-ref: ${{ steps.build-info.outputs.ci-image-name }}
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
@@ -79,7 +86,7 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           context: ${{ inputs.image-folder }}
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
+          tags: ${{ steps.build-info.outputs.image-name }}
           push: ${{ github.ref == 'refs/heads/main' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

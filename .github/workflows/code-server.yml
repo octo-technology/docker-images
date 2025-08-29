@@ -12,9 +12,24 @@ on:
       - "code-server/**"
 
 jobs:
+  get-code-server-version:
+    runs-on: ubuntu-latest
+    outputs:
+      code-server-version: ${{ steps.get_version.outputs.code-server-version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Retrieve code-server version from Dockerfile
+        id: get_version
+        run: |
+          version=$(awk -F: '/FROM.*code-server:/ { print $2 }' code-server/Dockerfile)
+          echo "Found code-server version: $version"
+          echo "code-server-version=$version" >> $GITHUB_OUTPUT
   build-code-server:
+    needs: get-code-server-version
     uses: ./.github/workflows/generic-docker-build.yml
     with:
       image-folder: code-server
-      image-tag: 4.101.2-ubuntu
-      skip-dirs: "/usr/local/bin,/home/coder/.local/share/code-server/extensions"
+      image-tag: ${{ needs.get-code-server-version.outputs.code-server-version }}
+      skip-dirs: "/usr/local/bin,/usr/lib/code-server/lib/vscode/extensions,/home/coder/.local/share/code-server/extensions"

@@ -10,7 +10,7 @@ FROM docker.io/derailed/k9s:v0.50.9 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive
 FROM ghcr.io/grafana/k6:1.2.3 AS k6
 FROM docker.io/alpine/helm:3.18.6 AS helm
-FROM docker.io/hadolint/hadolint:v2.12.0-alpine AS hadolint
+FROM docker.io/hadolint/hadolint:v2.13.1-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.16.1 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.10.5-minimal AS opentofu

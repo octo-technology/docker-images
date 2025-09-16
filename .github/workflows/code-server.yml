@@ -32,4 +32,4 @@ jobs:
     with:
       image-folder: code-server
       image-tag: ${{ needs.get-code-server-version.outputs.code-server-version }}
-      skip-dirs: "/usr/local/bin,/usr/lib/code-server/lib/vscode/extensions,/home/coder/.local/share/code-server/extensions"
+      skip-dirs: "/usr/local/bin,/usr/lib/code-server/lib/vscode,/home/coder/.local/share/code-server/extensions,/home/coder/.krew/"

@@ -36,6 +36,91 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (multi-platform)
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: ${{ inputs.image-folder }}
+          push: false
+          load: false
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=oci,dest=${{ runner.temp }}/image.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: ${{ runner.temp }}/image.tar
+          retention-days: 1
+
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    needs: build
+    steps:
+      - uses: actions/checkout@v5
+      
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: ${{ runner.temp }}
+
+      - name: Load Docker image for scanning (amd64 only)
+        run: |
+          mkdir -p ${{ runner.temp }}/image
+          tar -xf ${{ runner.temp }}/image.tar -C ${{ runner.temp }}/image
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with: 
+          input: ${{ runner.temp }}/image
+          #image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
+          exit-code: "1"
+          ignore-unfixed: true
+          skip-dirs: ${{ inputs.skip-dirs }}
+          trivyignores: "${{ inputs.image-folder }}/.trivyignore"
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+          limit-severities-for-sarif: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Dockerfile linting
+        uses: hadolint/hadolint-action@v3.2.0
+        with:
+          dockerfile: ${{ inputs.image-folder }}/Dockerfile
+          ignore: ${{ inputs.ignored-dockerfile-lint-rules }}
+
+  push:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    needs: [build, scan, lint]
+    steps:
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@v3.5.0
         with:
@@ -43,56 +128,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      - name: Download multi-platform image artifact
+        uses: actions/download-artifact@v4
         with:
-          platforms: linux/amd64,linux/arm64
-          context: ${{ inputs.image-folder }}
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          name: docker-image
+          path: ${{ runner.temp }}
 
-  scan:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    needs: build
-    steps:
-      - uses: actions/checkout@v5
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          skip-dirs: ${{ inputs.skip-dirs }}
-          trivyignores: "${{ inputs.image-folder }}/.trivyignore"
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
-        env:
-          TRIVY_USERNAME: ${{ github.actor }}
-          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: docker/login-action@v3.5.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Dockerfile linting
-        uses: hadolint/hadolint-action@v3.2.0
-        with:
-          dockerfile: ${{ inputs.image-folder }}/Dockerfile
-          ignore: ${{ inputs.ignored-dockerfile-lint-rules }}
+      - name: Push the exact scanned multi-platform image with skoppeo
+        run: |
+          sudo apt-get update && sudo apt-get install -y skopeo
+          mkdir -p ${{ runner.temp }}/image
+          tar -xf ${{ runner.temp }}/image.tar -C ${{ runner.temp }}/image
+          skopeo copy --all oci:${{ runner.temp }}/image docker://${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}

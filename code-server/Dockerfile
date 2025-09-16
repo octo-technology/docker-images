@@ -17,7 +17,7 @@ FROM ghcr.io/opentofu/opentofu:1.10.6-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.13.2 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.68.0 AS gitlab-cli
 
-FROM ghcr.io/coder/code-server:4.101.2-noble
+FROM ghcr.io/coder/code-server:4.104.0-noble
 ARG TARGETOS
 ARG TARGETARCH
 

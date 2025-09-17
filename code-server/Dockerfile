@@ -4,7 +4,7 @@ FROM docker.io/prom/alertmanager:v0.28.1 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.30.2 AS aws-cli
 FROM docker.io/library/docker:28.4.0-cli AS docker
 FROM docker.io/docker/buildx-bin:0.28.0 AS buildx
-FROM docker.io/bitnami/kubectl:1.33 AS kubectl
+FROM docker.io/rancher/kubectl:v1.34.1 AS kubectl
 FROM docker.io/bitnami/trivy:0.65.0 AS trivy
 FROM docker.io/derailed/k9s:v0.50.9 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive
@@ -69,7 +69,7 @@ COPY --from=docker /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugi
 COPY --from=buildx /buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
 # Installer cli tools
-COPY --from=kubectl /opt/bitnami/kubectl/bin/kubectl /usr/local/bin
+COPY --from=kubectl /bin/kubectl /usr/local/bin
 COPY --from=trivy /opt/bitnami/trivy/bin/trivy /usr/local/bin
 COPY --from=k9s /bin/k9s /usr/local/bin
 COPY --from=dive /usr/local/bin/dive /usr/local/bin

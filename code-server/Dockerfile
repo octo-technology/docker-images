@@ -26,7 +26,7 @@ USER root
 WORKDIR /home/coder
 ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris
 # Mettre à jour les paquets et installer les dépendances
-RUN apt-get -y update && apt-get -y install \
+RUN apt-get -y update && apt-get -y install --no-install-recommends \
     git \
     vim \
     wget \

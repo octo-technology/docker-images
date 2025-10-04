@@ -108,10 +108,8 @@ COPY bash_completion.sh /etc/bash_completion.d/kube.sh
 ADD --chmod=755 https://raw.githubusercontent.com/jonmosco/kube-ps1/refs/heads/master/kube-ps1.sh /usr/local/bin/kube-ps1.sh
 
 # Installer promtool + prometheus + alertmanager + amtool
-COPY --from=prometheus /bin/prometheus /usr/local/bin
-COPY --from=prometheus /bin/promtool /usr/local/bin
-COPY --from=alertmanager /bin/alertmanager /usr/local/bin
-COPY --from=alertmanager /bin/amtool /usr/local/bin
+COPY --from=prometheus /bin/prometheus /bin/promtool /usr/local/bin/
+COPY --from=alertmanager /bin/alertmanager /bin/amtool /usr/local/bin/
 
 # Installation de plugins ❤️
 RUN code-server --install-extension bierner.markdown-mermaid

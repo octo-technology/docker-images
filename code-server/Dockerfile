@@ -95,7 +95,7 @@ RUN KREW_BINARY="krew-${TARGETOS}_${TARGETARCH}" && \
     cd ~ && rm -rf "$TMPDIR" && rm -f ~/.wget-hsts
 
 # Install kapp
-ENV KAPP_VERSION="v0.64.0"
+ENV KAPP_VERSION="v0.64.2"
 ADD --chmod=755 --chown=root:root https://github.com/carvel-dev/kapp/releases/download/${KAPP_VERSION}/kapp-${TARGETOS}-${TARGETARCH} /usr/local/bin/kapp
 
 # Installer kubectx

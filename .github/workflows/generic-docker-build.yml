@@ -41,8 +41,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-flags: "'--debug'"
 
       - name: Build Docker image (multi-platform)
         uses: docker/build-push-action@v6
@@ -54,7 +52,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=min
-          outputs: type=oci,dest=${{ runner.temp }}/image.tar
+          outputs: type=oci,compression=zstd,dest=${{ runner.temp }}/image.tar
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v4

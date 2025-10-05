@@ -52,7 +52,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=min
-          outputs: type=oci,compression=zstd,dest=${{ runner.temp }}/image.tar
+          outputs: type=oci,compression=zstd,force-compression=true,dest=${{ runner.temp }}/image.tar
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v4

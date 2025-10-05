@@ -51,7 +51,7 @@ jobs:
           load: false
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
           cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-to: type=gha,mode=max,compression=zstd
           provenance: false
           outputs: type=oci,dest=${{ runner.temp }}/image.tar
 

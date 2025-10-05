@@ -53,7 +53,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max,compression=zstd
           provenance: false
-          outputs: type=oci,dest=${{ runner.temp }}/image.tar
+          outputs: type=oci,compression=zstd,dest=${{ runner.temp }}/image.tar
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v4

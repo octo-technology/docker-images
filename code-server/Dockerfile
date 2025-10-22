@@ -1,5 +1,5 @@
 # Référence de l'ensemble des versions à utiliser pour l'installation des outils
-FROM docker.io/prom/prometheus:v3.7.1 AS prometheus
+FROM docker.io/prom/prometheus:v3.7.2 AS prometheus
 FROM docker.io/prom/alertmanager:v0.28.1 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.31.19 AS aws-cli
 FROM docker.io/library/docker:28.5.1-cli AS docker

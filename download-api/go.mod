@@ -1,6 +1,6 @@
 module download-api
 
-go 1.24
+go 1.25
 
 require (
 	github.com/knadh/koanf/providers/confmap v1.0.0

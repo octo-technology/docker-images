@@ -18,7 +18,7 @@ jobs:
       code-server-version: ${{ steps.get_version.outputs.code-server-version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Retrieve code-server version from Dockerfile
         id: get_version

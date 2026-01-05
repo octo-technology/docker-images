@@ -4,7 +4,7 @@ FROM docker.io/prom/alertmanager:v0.30.0 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.32.26 AS aws-cli
 FROM docker.io/library/docker:29.1.3-cli AS docker
 FROM docker.io/docker/buildx-bin:0.30.1 AS buildx
-FROM docker.io/rancher/kubectl:v1.34.3 AS kubectl
+FROM docker.io/rancher/kubectl:v1.35.0 AS kubectl
 FROM ghcr.io/aquasecurity/trivy:0.68.2 AS trivy
 FROM docker.io/derailed/k9s:v0.50.16 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive

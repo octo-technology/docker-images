@@ -8,7 +8,7 @@ FROM docker.io/rancher/kubectl:v1.35.0 AS kubectl
 FROM ghcr.io/aquasecurity/trivy:0.69.1 AS trivy
 FROM docker.io/derailed/k9s:v0.50.18 AS k9s
 FROM ghcr.io/wagoodman/dive:v0.13.1 AS dive
-FROM ghcr.io/grafana/k6:1.5.0 AS k6
+FROM ghcr.io/grafana/k6:1.6.0 AS k6
 FROM docker.io/alpine/helm:4.1.0 AS helm
 FROM docker.io/hadolint/hadolint:v2.14.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle

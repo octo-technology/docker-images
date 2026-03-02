@@ -62,7 +62,7 @@ jobs:
           outputs: type=oci,compression=zstd,dest=${{ runner.temp }}/image.tar
 
       - name: Upload image artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: docker-image
           path: ${{ runner.temp }}/image.tar

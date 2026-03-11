@@ -16,4 +16,4 @@ jobs:
     uses: ./.github/workflows/generic-docker-build.yml
     with:
       image-folder: download-api
-      image-tag: 0.1.0
+      image-tag: 0.2.0

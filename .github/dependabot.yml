@@ -25,3 +25,11 @@ updates:
     directory: "/download-api"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "docker"
+    directory: "/j2cli"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "pip"
+    directory: "/j2cli"
+    schedule:
+      interval: "weekly"

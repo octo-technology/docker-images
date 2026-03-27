@@ -58,7 +58,7 @@ USER coder
 
 # Install AWS CLI & docker-credential-ecr-login
 COPY --from=aws-cli /usr/local /usr/local
-ENV AWS_ECR_HELPER_VERSION="0.9.1"
+ENV AWS_ECR_HELPER_VERSION="0.12.0"
 ADD --chmod=755 --chown=root:root \
     https://amazon-ecr-credential-helper-releases.s3.us-east-2.amazonaws.com/${AWS_ECR_HELPER_VERSION}/${TARGETOS}-${TARGETARCH}/docker-credential-ecr-login \
     /usr/local/bin/docker-credential-ecr-login
@@ -83,7 +83,7 @@ COPY --from=terraform /bin/terraform /usr/local/bin
 COPY --from=gitlab-cli /usr/bin/glab /usr/local/bin
 
 # Install krew
-ENV KREW_VERSION="v0.4.5"
+ENV KREW_VERSION="v0.5.0"
 # hadolint ignore=DL3003,SC2016
 RUN KREW_BINARY="krew-${TARGETOS}_${TARGETARCH}" && \
     TMPDIR="$(mktemp -d)" && \
@@ -91,15 +91,15 @@ RUN KREW_BINARY="krew-${TARGETOS}_${TARGETARCH}" && \
     wget -q https://github.com/kubernetes-sigs/krew/releases/download/${KREW_VERSION}/${KREW_BINARY}.tar.gz && \
     tar zxvf "${KREW_BINARY}.tar.gz" && \
     ./${KREW_BINARY} install krew && \
-    echo 'PATH="$HOME/.krew/bin:$PATH"' >> ~/.profile && \
+    echo 'PATH="$HOME/.krew/bin:$PATH"' >> ~/.bash_profile && \
+    echo 'PATH="$HOME/.krew/bin:$PATH"' >> ~/.zprofile && \
     cd ~ && rm -rf "$TMPDIR" && rm -f ~/.wget-hsts
-
 # Install kapp
-ENV KAPP_VERSION="v0.64.2"
+ENV KAPP_VERSION="v0.65.1"
 ADD --chmod=755 --chown=root:root https://github.com/carvel-dev/kapp/releases/download/${KAPP_VERSION}/kapp-${TARGETOS}-${TARGETARCH} /usr/local/bin/kapp
 
 # Installer kubectx
-ENV KUBECTX_VERSION="v0.9.5"
+ENV KUBECTX_VERSION="v0.11.0"
 ADD --chmod=755 --chown=root:root https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubectx /usr/local/bin/kubectx
 ADD --chmod=755 --chown=root:root https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubens /usr/local/bin/kubens
 

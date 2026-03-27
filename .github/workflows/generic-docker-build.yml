@@ -47,12 +47,16 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+      
+      - name: Set build timestamp
+        run: echo "BUILD_TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
 
       - name: Build Docker image (multi-platform)
         uses: docker/build-push-action@v7
         with:
           platforms: linux/amd64,linux/arm64
           context: ${{ inputs.image-folder }}
+          build-args: VERSION=${{ inputs.image-tag }},BUILD_TIMESTAMP=${{ env.BUILD_TIMESTAMP }}
           push: false
           load: false
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}

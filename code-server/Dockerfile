@@ -114,5 +114,20 @@ COPY --from=alertmanager /bin/alertmanager /bin/amtool /usr/local/bin/
 # Installation de plugins ❤️
 RUN code-server --install-extension bierner.markdown-mermaid
 
+# Labels OCI pour identification de l'image
+ARG VERSION="dev"
+ARG BUILD_TIMESTAMP="unknown"
+
+LABEL org.opencontainers.image.title="Code Server"
+LABEL org.opencontainers.image.authors="Joseph Page <josephpage@users.noreply.github.com>, Yannig Perre <yannig@users.noreply.github.com>"
+LABEL org.opencontainers.image.description="Code Server (VSCode in the browser), used in OCTO training sessions"
+LABEL org.opencontainers.image.url="https://www.octo.academy"
+LABEL org.opencontainers.image.vendor="OCTO Technology"
+LABEL org.opencontainers.image.source="https://github.com/octo-technology/docker-images/tree/main/code-server"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.created="${BUILD_TIMESTAMP}"
+LABEL org.opencontainers.image.base.name="ghcr.io/coder/code-server:4.111.0-noble"
+
 # Définir le point d'entrée par défaut
 CMD ["/bin/bash"]

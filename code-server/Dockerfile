@@ -54,6 +54,33 @@ RUN apt-get -y update && apt-get -y install --no-install-recommends \
     ln -s /usr/bin/python3 /usr/local/bin/python && \
     ln -s /usr/bin/pip3 /usr/local/bin/pip
 
+# Use bash with pipefail for RUN commands that include pipelines (hadolint DL4006)
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Install Claude Code (without claude.ai bootstrap)
+ARG CLAUDE_CODE_VERSION="latest"
+ENV CLAUDE_CODE_BUCKET="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) CLAUDE_ARCH="x64" ;; \
+        arm64) CLAUDE_ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    CLAUDE_PLATFORM="linux-${CLAUDE_ARCH}"; \
+    if [ "${CLAUDE_CODE_VERSION}" = "latest" ]; then \
+        CLAUDE_CODE_VERSION="$(wget -qO- "${CLAUDE_CODE_BUCKET}/latest")"; \
+    fi; \
+    MANIFEST_JSON="$(wget -qO- "${CLAUDE_CODE_BUCKET}/${CLAUDE_CODE_VERSION}/manifest.json")"; \
+    CLAUDE_CHECKSUM="$(echo "${MANIFEST_JSON}" | jq -r ".platforms[\"${CLAUDE_PLATFORM}\"].checksum // empty")"; \
+    if [ -z "${CLAUDE_CHECKSUM}" ]; then \
+        echo "Platform ${CLAUDE_PLATFORM} not found in manifest for ${CLAUDE_CODE_VERSION}" >&2; \
+        exit 1; \
+    fi; \
+    wget -qO /tmp/claude "${CLAUDE_CODE_BUCKET}/${CLAUDE_CODE_VERSION}/${CLAUDE_PLATFORM}/claude"; \
+    echo "${CLAUDE_CHECKSUM}  /tmp/claude" | sha256sum -c -; \
+    install -m 0755 /tmp/claude /usr/local/bin/claude; \
+    rm -f /tmp/claude
+
 # Et on revient à un utilisateur lambda pour la suite
 USER coder
 

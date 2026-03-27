@@ -16,6 +16,7 @@ FROM gcr.io/k8s-skaffold/skaffold:v2.18.1 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.11.5-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.14.7 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.90.0 AS gitlab-cli
+FROM ghcr.io/astral-sh/uv:0.11.2 AS uv
 
 FROM ghcr.io/coder/code-server:4.112.0-noble
 ARG TARGETOS
@@ -69,18 +70,19 @@ COPY --from=docker /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugi
 COPY --from=buildx /buildx /usr/local/lib/docker/cli-plugins/docker-buildx
 
 # Installer cli tools
-COPY --from=kubectl /bin/kubectl /usr/local/bin
-COPY --from=trivy /usr/local/bin/trivy /usr/local/bin
-COPY --from=k9s /bin/k9s /usr/local/bin
-COPY --from=dive /usr/local/bin/dive /usr/local/bin
-COPY --from=k6 /usr/bin/k6 /usr/local/bin
-COPY --from=helm /usr/bin/helm /usr/local/bin
-COPY --from=hadolint /bin/hadolint /usr/local/bin
-COPY --from=dockle /usr/bin/dockle /usr/local/bin
-COPY --from=skaffold /usr/bin/skaffold /usr/local/bin
-COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin
-COPY --from=terraform /bin/terraform /usr/local/bin
-COPY --from=gitlab-cli /usr/bin/glab /usr/local/bin
+COPY --from=uv /uv /uvx /usr/local/bin/
+COPY --from=kubectl /bin/kubectl /usr/local/bin/
+COPY --from=trivy /usr/local/bin/trivy /usr/local/bin/
+COPY --from=k9s /bin/k9s /usr/local/bin/
+COPY --from=dive /usr/local/bin/dive /usr/local/bin/
+COPY --from=k6 /usr/bin/k6 /usr/local/bin/
+COPY --from=helm /usr/bin/helm /usr/local/bin/
+COPY --from=hadolint /bin/hadolint /usr/local/bin/
+COPY --from=dockle /usr/bin/dockle /usr/local/bin/
+COPY --from=skaffold /usr/bin/skaffold /usr/local/bin/
+COPY --from=opentofu /usr/local/bin/tofu /usr/local/bin/
+COPY --from=terraform /bin/terraform /usr/local/bin/
+COPY --from=gitlab-cli /usr/bin/glab /usr/local/bin/
 
 # Install krew
 ENV KREW_VERSION="v0.4.5"

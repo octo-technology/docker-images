@@ -18,7 +18,7 @@ FROM docker.io/hashicorp/terraform:1.14.8 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.92.1 AS gitlab-cli
 FROM ghcr.io/astral-sh/uv:0.11.6 AS uv
 
-FROM ghcr.io/coder/code-server:4.114.1-noble
+FROM ghcr.io/coder/code-server:4.116.0-noble
 ARG TARGETOS
 ARG TARGETARCH
 

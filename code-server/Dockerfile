@@ -15,7 +15,7 @@ FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.19.0 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.11.6-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.15.2 AS terraform
-FROM registry.gitlab.com/gitlab-org/cli:v1.93.0 AS gitlab-cli
+FROM registry.gitlab.com/gitlab-org/cli:v1.95.0 AS gitlab-cli
 FROM ghcr.io/astral-sh/uv:0.11.11 AS uv
 
 FROM ghcr.io/coder/code-server:4.117.0-noble

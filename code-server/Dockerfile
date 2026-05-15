@@ -12,7 +12,7 @@ FROM ghcr.io/grafana/k6:2.0.0 AS k6
 FROM docker.io/alpine/helm:4.1.4 AS helm
 FROM docker.io/hadolint/hadolint:v2.14.0-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
-FROM gcr.io/k8s-skaffold/skaffold:v2.19.0 AS skaffold
+FROM gcr.io/k8s-skaffold/skaffold:v2.20.0 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.12.0-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.15.3 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.97.0 AS gitlab-cli

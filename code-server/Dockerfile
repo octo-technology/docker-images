@@ -16,7 +16,7 @@ FROM gcr.io/k8s-skaffold/skaffold:v2.20.0 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.12.0-minimal AS opentofu
 FROM docker.io/hashicorp/terraform:1.15.3 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.97.0 AS gitlab-cli
-FROM ghcr.io/astral-sh/uv:0.11.14 AS uv
+FROM ghcr.io/astral-sh/uv:0.11.15 AS uv
 
 FROM ghcr.io/coder/code-server:4.118.0-noble
 ARG TARGETOS

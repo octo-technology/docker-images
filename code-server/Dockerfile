@@ -140,8 +140,5 @@ ADD --chmod=755 https://raw.githubusercontent.com/jonmosco/kube-ps1/refs/heads/m
 COPY --from=prometheus /bin/prometheus /bin/promtool /usr/local/bin/
 COPY --from=alertmanager /bin/alertmanager /bin/amtool /usr/local/bin/
 
-# Installation de plugins ❤️
-RUN code-server --install-extension bierner.markdown-mermaid
-
 # Définir le point d'entrée par défaut
 CMD ["/bin/bash"]

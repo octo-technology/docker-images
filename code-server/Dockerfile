@@ -3,7 +3,7 @@ FROM docker.io/prom/prometheus:v3.12.0 AS prometheus
 FROM docker.io/prom/alertmanager:v0.33.0 AS alertmanager
 FROM public.ecr.aws/aws-cli/aws-cli:2.35.7 AS aws-cli
 FROM docker.io/library/docker:29.5.3-cli AS docker
-FROM docker.io/docker/buildx-bin:0.34.1 AS buildx
+FROM docker.io/docker/buildx-bin:0.35.0 AS buildx
 FROM docker.io/rancher/kubectl:v1.36.1 AS kubectl
 FROM ghcr.io/aquasecurity/trivy:0.71.1 AS trivy
 FROM docker.io/derailed/k9s:v0.50.18 AS k9s

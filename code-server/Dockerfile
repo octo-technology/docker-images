@@ -22,8 +22,8 @@ FROM ghcr.io/coder/code-server:4.130.0-noble
 ARG TARGETOS
 ARG TARGETARCH
 
-# Nécessaire pour installer les paquets
-USER root
+# Nécessaire pour installer les paquets (UID numérique = root, requis par hadolint DL3066)
+USER 0
 WORKDIR /home/coder
 ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris
 # Mettre à jour les paquets et installer les dépendances
@@ -81,8 +81,8 @@ RUN set -eux; \
     install -m 0755 /tmp/claude /usr/local/bin/claude; \
     rm -f /tmp/claude
 
-# Et on revient à un utilisateur lambda pour la suite
-USER coder
+# Et on revient à un utilisateur lambda pour la suite (UID numérique = coder, requis par hadolint DL3066)
+USER 1000
 
 # Install AWS CLI & docker-credential-ecr-login
 COPY --from=aws-cli /usr/local /usr/local

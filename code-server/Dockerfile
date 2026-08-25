@@ -14,7 +14,7 @@ FROM docker.io/hadolint/hadolint:v2.15.1-alpine AS hadolint
 FROM docker.io/goodwithtech/dockle:v0.4.15 AS dockle
 FROM gcr.io/k8s-skaffold/skaffold:v2.24.0 AS skaffold
 FROM ghcr.io/opentofu/opentofu:1.12.6-minimal AS opentofu
-FROM docker.io/hashicorp/terraform:1.15.8 AS terraform
+FROM docker.io/hashicorp/terraform:1.15.9 AS terraform
 FROM registry.gitlab.com/gitlab-org/cli:v1.114.0 AS gitlab-cli
 FROM ghcr.io/astral-sh/uv:0.12.5 AS uv
 

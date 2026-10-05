@@ -19,3 +19,19 @@ vulnerabilities:
   - id: CVE-2025-22874
     statement: "dive v0.13.1 embeds Go 1.24.1 stdlib; no patched dive release exists upstream (last release v0.13.1, March 2025). Accepted risk; the CI scan skips /usr/local/bin for this image."
     expired_at: 2027-01-05
+
+  # CVE-2026-102990 (basic-ftp 5.3.1, fix 6.2.1) est embarquée dans les
+  # node_modules de l'image de base coder/code-server:4.140.0-noble. Le fix
+  # nécessite un bump major (5.x -> 6.x) à faire par coder en amont.
+  # À réévaluer au prochain bump de l'image de base (dependabot quotidien).
+  - id: CVE-2026-102990
+    statement: "basic-ftp 5.3.1 is baked into the coder/code-server base image node_modules; fix (6.2.1) requires an upstream major bump by coder. Re-evaluate at the next base image bump."
+    expired_at: 2027-01-05
+
+  # CVE-2026-17106 (moby/go-archive v0.2.0, fix 0.3.0) est embarquée dans le
+  # plugin docker-buildx 0.37.1 (toujours présent dans 0.37.2, dernière stable).
+  # Aucune release stable de buildx n'embarque encore le fix ; dependabot
+  # proposera le bump dès la publication de la prochaine version stable.
+  - id: CVE-2026-17106
+    statement: "docker-buildx 0.37.1 (and latest stable 0.37.2) still embeds moby/go-archive v0.2.0; the fix (v0.3.0) is not in any stable buildx release yet. Dependabot will bump buildx when the next stable is out."
+    expired_at: 2027-01-05

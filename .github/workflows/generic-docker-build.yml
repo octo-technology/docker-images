@@ -88,27 +88,70 @@ jobs:
           mkdir -p ${{ runner.temp }}/image
           tar -xf ${{ runner.temp }}/image.tar -C ${{ runner.temp }}/image
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Ensure a .trivyignore.yaml file exists for this image
+        run: |
+          if [ ! -f "${{ inputs.image-folder }}/.trivyignore.yaml" ]; then
+            echo "vulnerabilities: []" > "${{ inputs.image-folder }}/.trivyignore.yaml"
+            echo "Created empty .trivyignore.yaml for ${{ inputs.image-folder }}"
+          fi
+
+      # Pass 1/2 - Transparency: report every fixable CRITICAL/HIGH finding to the
+      # GitHub Security tab. Never blocks the pipeline, even when findings exist.
+      - name: Trivy scan - transparency report (SARIF, never blocking)
+        uses: aquasecurity/trivy-action@v0.36.0
         continue-on-error: true
         with: 
           input: ${{ runner.temp }}/image
           #image-ref: ${{ env.REGISTRY }}/${{ github.repository }}/${{ inputs.image-name || inputs.image-folder }}:${{ inputs.image-tag }}
-          exit-code: "1"
           ignore-unfixed: true
           skip-dirs: ${{ inputs.skip-dirs }}
-          trivyignores: "${{ inputs.image-folder }}/.trivyignore"
+          trivyignores: "${{ inputs.image-folder }}/.trivyignore.yaml"
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
           limit-severities-for-sarif: true
           format: 'sarif'
           output: 'trivy-results.sarif'
 
+      # Pass 2/2 - Gate: fail the job (and thus block the image push) only when
+      # the image contains fixable CRITICAL vulnerabilities. Everything else
+      # (HIGH, unfixed upstream, or listed in .trivyignore.yaml) passes.
+      - name: Trivy gate - fail on fixable CRITICAL vulnerabilities only
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          input: ${{ runner.temp }}/image
+          exit-code: "1"
+          ignore-unfixed: true
+          skip-dirs: ${{ inputs.skip-dirs }}
+          trivyignores: "${{ inputs.image-folder }}/.trivyignore.yaml"
+          vuln-type: "os,library"
+          severity: "CRITICAL"
+          format: 'table'
+
+      - name: Publish scan summary
+        if: always()
+        run: |
+          if [ ! -f trivy-results.sarif ]; then
+            echo "### Trivy image scan - no SARIF report was produced" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          total=$(jq '[.runs[0].results[]?] | length' trivy-results.sarif)
+          {
+            echo "### Trivy image scan - ${{ inputs.image-folder }}"
+            echo ""
+            echo "| Fixable findings (CRITICAL, HIGH) |"
+            echo "|---|"
+            echo "| $total |"
+            echo ""
+            echo "Full report in the Security tab (code scanning, category \`trivy-image-${{ inputs.image-folder }}\`)."
+            echo "Only fixable CRITICAL findings block the image push; everything else is informational."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v4.38.2
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+          category: 'trivy-image-${{ inputs.image-folder }}'
 
   lint:
     runs-on: ubuntu-latest

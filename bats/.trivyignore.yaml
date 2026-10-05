@@ -1,0 +1,6 @@
+# Failles volontairement ignorées pour cette image.
+# Convention (appliquée par generic-docker-build.yml) :
+#   - statement : justification - pourquoi la faille n'est pas corrigeable maintenant
+#   - expired_at : date (AAAA-MM-JJ) après laquelle l'ignore expire et force
+#     la réévaluation de la faille (convention : ~3 mois après ajout)
+vulnerabilities: []

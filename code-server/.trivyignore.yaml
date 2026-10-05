@@ -3,23 +3,19 @@
 #   - statement : justification - pourquoi la faille n'est pas corrigeable maintenant
 #   - expired_at : date (AAAA-MM-JJ) après laquelle l'ignore expire et force
 #     la réévaluation de la faille (convention : ~3 mois après ajout)
+#
+# Historique - CVE retirées car corrigées (vérifié par scan Trivy le 2026-10-05) :
+#   - CVE-2025-32462, CVE-2025-32463 (sudo) : corrigées dans sudo 1.9.17p1,
+#     backportées dans Ubuntu noble ; absentes de l'image de base actuelle.
+#   - CVE-2025-47907 (Go database/sql, fix Go 1.24.6/1.23.12) : plus aucun
+#     binaire de l'image n'embarque une version de Go vulnérable
+#     (krew v0.5.0 est compilé avec Go 1.25, docker CLI/compose et buildx sont propres).
 vulnerabilities:
-  # CVE-2025-22874 est détectée via la stdlib Go vulnérable d'une dépendance
-  # (probablement krew ou un outil lié). Ignore temporaire en attendant un fix
-  # upstream (Go >= 1.24.4 ou une release patchée de krew).
+  # CVE-2025-22874 (crypto/x509, corrigée dans Go 1.24.4) est encore portée par
+  # /usr/local/bin/dive v0.13.1, compilé avec Go 1.24.1. dive n'a pas de release
+  # plus récente que v0.13.1 (mars 2025) : impossible à corriger par un bump.
+  # Le scan CI exclut /usr/local/bin pour cette image (skip-dirs), donc cet
+  # ignore ne concerne que les scans locaux exécutés sans les skip-dirs du CI.
   - id: CVE-2025-22874
-    statement: "Vulnerable Go stdlib bundled in a dependency (likely krew or a related tool); ignored until an upstream fix is available (Go >= 1.24.4 or a patched krew release)"
-    expired_at: 2027-01-05
-
-  # sudo (packages système de l'image de base)
-  - id: CVE-2025-32462
-    statement: "sudo package CVE, no actionable fix in the base image right now; to re-evaluate on next base image update"
-    expired_at: 2027-01-05
-  - id: CVE-2025-32463
-    statement: "sudo package CVE, no actionable fix in the base image right now; to re-evaluate on next base image update"
-    expired_at: 2027-01-05
-
-  # go stdlib (binaires krew, docker-buildx, docker-compose)
-  - id: CVE-2025-47907
-    statement: "Go stdlib CVE bundled in krew/docker-buildx/docker-compose binaries; waiting for upstream releases"
+    statement: "dive v0.13.1 embeds Go 1.24.1 stdlib; no patched dive release exists upstream (last release v0.13.1, March 2025). Accepted risk; the CI scan skips /usr/local/bin for this image."
     expired_at: 2027-01-05

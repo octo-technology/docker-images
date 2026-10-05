@@ -98,7 +98,7 @@ jobs:
       # Pass 1/2 - Transparency: report every fixable CRITICAL/HIGH finding to the
       # GitHub Security tab. Never blocks the pipeline, even when findings exist.
       - name: Trivy scan - transparency report (SARIF, never blocking)
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         continue-on-error: true
         with: 
           input: ${{ runner.temp }}/image
@@ -116,7 +116,7 @@ jobs:
       # the image contains fixable CRITICAL vulnerabilities. Everything else
       # (HIGH, unfixed upstream, or listed in .trivyignore.yaml) passes.
       - name: Trivy gate - fail on fixable CRITICAL vulnerabilities only
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           input: ${{ runner.temp }}/image
           exit-code: "1"

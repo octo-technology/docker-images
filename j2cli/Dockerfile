@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.14-slim
+FROM docker.io/library/python:3.15-slim
 
 # hadolint ignore=DL3013
 RUN apt-get update && apt-get upgrade -y && \

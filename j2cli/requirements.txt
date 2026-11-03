@@ -1,1 +1,1 @@
-jinjanator==26.2.0
+jinjanator==26.3.0

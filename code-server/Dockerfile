@@ -27,7 +27,10 @@ USER 0
 WORKDIR /home/coder
 ENV DEBIAN_FRONTEND=noninteractive TZ=Europe/Paris
 # Mettre à jour les paquets et installer les dépendances
-RUN apt-get -y update && apt-get -y install --no-install-recommends \
+# Acquire::Retries : résilience réseau ; la chaîne de commande fait partie de la
+# clé de cache buildx — toute modification ici force la ré-exécution de la
+# couche apt (et donc la récupération des mises à jour de sécurité nobles).
+RUN apt-get -y -o Acquire::Retries=3 update && apt-get -y -o Acquire::Retries=3 install --no-install-recommends \
     git \
     vim \
     wget \
